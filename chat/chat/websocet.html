@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebSocket Test</title>
+</head>
+<body>
+    <div class="container mt-3">
+    <h1>WebSocket chat test</h1>
+    <form action="" onsubmit="sendMessage(event)">
+        <input type="text" class="form-control" id="messageText" autocomplete="off"/>
+        <button class="btn btn-outline-primary mt-2">send</button>
+    </form>
+    <ul id="messages" class="mt-5">
+    </ul>
+
+    </div>
+
+        <script>
+            var clinet_id = Date.now()
+            document.querySelector("#ws-id").textContent = clinet_id
+            
+            var ws = new WebSocket(`ws://127.0.0.1:8000/ws/${client_id}`);
+            ws.onmessage = function(event){
+                var messages = document.getElementById('messages')
+                var message = document.createElement('li')
+                var content = document.createTextNode(event.data)
+                message.appendChild(content)
+                messages.appendChild(message)            
+            };
+
+            function sendMessage(event) {
+                var input = document.getElementById('messageText')
+                ws.send(input.value)
+                input.value = ''
+                event.preventDefault()
+            }
+
+        </script>
+</body>
+</html>
